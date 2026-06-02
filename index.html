@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 
-:root{--kyn-red:#EF3E23;--kyn-red2:#c8341c;--kyn-dark:#1a1a1a;--kyn-gray:#f2f2f0;--kyn-gray2:#e5e5e3;--kyn-gray3:#b0b0ac;--kyn-gray4:#6b6b68;--kyn-white:#ffffff;--kyn-border:#ddddd9;--dr-bg:#fff5f3;--dr-border:#EF3E23;--dr-text:#b02e18;--pr-bg:#f0f4ff;--pr-border:#2563eb;--pr-text:#1d4ed8;--os-bg:#f0fdf4;--os-border:#16a34a;--os-text:#15803d;--warn:#f59e0b;--danger:#dc2626;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--card-r:5px;}
+:root{--kyn-red:#EF3E23;--kyn-red2:#c8341c;--kyn-dark:#1a1a1a;--kyn-gray:#f2f2f0;--kyn-gray2:#e5e5e3;--kyn-gray3:#b0b0ac;--kyn-gray4:#6b6b68;--kyn-white:#ffffff;--kyn-border:#ddddd9;--dr-bg:#fff5f3;--dr-border:#EF3E23;--dr-text:#b02e18;--pr-bg:#f0f4ff;--pr-border:#2563eb;--pr-text:#1d4ed8;--os-bg:#f0fdf4;--os-border:#16a34a;--os-text:#15803d;--mp-bg:#faf5ff;--mp-border:#7c3aed;--mp-text:#5b21b6;--in-bg:#fefce8;--in-border:#ca8a04;--in-text:#854d0e;--warn:#f59e0b;--danger:#dc2626;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--card-r:5px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--kyn-gray);color:var(--kyn-dark);font-family:var(--font);font-size:14px;min-height:100vh;}
 .header{background:var(--kyn-dark);border-bottom:3px solid var(--kyn-red);padding:0 28px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 14px rgba(0,0,0,.22);}
@@ -31,6 +31,8 @@ body{background:var(--kyn-gray);color:var(--kyn-dark);font-family:var(--font);fo
 .room-pill.dr{border-color:var(--dr-border);color:var(--dr-text);background:var(--dr-bg);}
 .room-pill.pr{border-color:var(--pr-border);color:var(--pr-text);background:var(--pr-bg);}
 .room-pill.os{border-color:var(--os-border);color:var(--os-text);background:var(--os-bg);}
+.room-pill.mp{border-color:var(--mp-border);color:var(--mp-text);background:var(--mp-bg);}
+.room-pill.in{border-color:var(--in-border);color:var(--in-text);background:var(--in-bg);}
 .room-pill.inactive{opacity:.28;filter:grayscale(.5);}
 .room-pill:hover{opacity:1!important;filter:none!important;}
 .legend-hint{margin-left:auto;font-size:11px;color:var(--kyn-gray3);font-family:var(--mono);}
@@ -110,6 +112,8 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
 .sess-block.room-dr{background:var(--dr-bg);border-left-color:var(--dr-border);color:var(--dr-text);}
 .sess-block.room-pr{background:var(--pr-bg);border-left-color:var(--pr-border);color:var(--pr-text);}
 .sess-block.room-os{background:var(--os-bg);border-left-color:var(--os-border);color:var(--os-text);}
+.sess-block.room-mp{background:var(--mp-bg);border-left-color:var(--mp-border);color:var(--mp-text);}
+.sess-block.room-in{background:var(--in-bg);border-left-color:var(--in-border);color:var(--in-text);}
 .sess-block.filtered{opacity:.15;}
 .sb-room-tag{font-size:8px;font-weight:700;letter-spacing:.5px;opacity:.65;line-height:1;}
 .sb-spec{font-weight:700;font-size:11px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -273,6 +277,8 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
     <div class="room-pill dr" data-room="DR" onclick="toggleRoomFilter('DR',this)"><span class="rp-dot" style="background:var(--dr-border)"></span>Diagnostic Room</div>
     <div class="room-pill pr" data-room="PR" onclick="toggleRoomFilter('PR',this)"><span class="rp-dot" style="background:var(--pr-border)"></span>Problem Room</div>
     <div class="room-pill os" data-room="OS" onclick="toggleRoomFilter('OS',this)"><span class="rp-dot" style="background:var(--os-border)"></span>One Shot</div>
+    <div class="room-pill mp" data-room="MP" onclick="toggleRoomFilter('MP',this)"><span class="rp-dot" style="background:var(--mp-border)"></span>Monitoreo Preventivo</div>
+    <div class="room-pill in" data-room="IN" onclick="toggleRoomFilter('IN',this)"><span class="rp-dot" style="background:var(--in-border)"></span>Incidentes</div>
     <span class="legend-hint">Clic en columna o + para agregar sesion</span>
   </div>
   <div class="controls">
@@ -407,6 +413,8 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
       <option value="DR">Diagnostic Room</option>
       <option value="PR">Problem Room</option>
       <option value="OS">One Shot</option>
+      <option value="MP">Monitoreo Preventivo</option>
+      <option value="IN">Incidentes</option>
     </select>
     <label>Especialista</label>
     <select id="modalSpec" onchange="checkConflicts()"></select>
@@ -463,7 +471,7 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
 
 const SPECIALISTS=['Diego Postigo','Fredy Mejia','Saori Kobayashi','Miguel Montanez','Kevin Pillaca','Bryan Arnao Farfan','Jesus Salazar Paz'];
 const SPEC_COLORS=['#EF3E23','#0062FF','#8a3ffc','#007d79','#f1620a','#198038','#a2191f'];
-const ROOMS={DR:{label:'Diagnostic Room',short:'DR',cls:'room-dr'},PR:{label:'Problem Room',short:'PR',cls:'room-pr'},OS:{label:'One Shot',short:'OS',cls:'room-os'}};
+const ROOMS={DR:{label:'Diagnostic Room',short:'DR',cls:'room-dr'},PR:{label:'Problem Room',short:'PR',cls:'room-pr'},OS:{label:'One Shot',short:'OS',cls:'room-os'},MP:{label:'Monitoreo Preventivo',short:'MP',cls:'room-mp'},IN:{label:'Incidentes',short:'IN',cls:'room-in'}};
 const NIGHT_SUPPORT=[
   {from:'2026-05-30',to:'2026-06-06',s1:'Saori Kobayashi',s2:'Miguel Montanez'},
   {from:'2026-06-06',to:'2026-06-13',s1:'Diego Postigo',s2:'Kevin Pillaca'},
@@ -771,8 +779,8 @@ function renderSupportBanner(d){
 }
 function renderStats(weekDates){
   const bar=document.getElementById('statsBar');bar.innerHTML='';
-  const bySpec={};SPECIALISTS.forEach(s=>bySpec[s]={min:0,DR:0,PR:0,OS:0});
-  const byRoom={DR:0,PR:0,OS:0};
+  const bySpec={};SPECIALISTS.forEach(s=>bySpec[s]={min:0,DR:0,PR:0,OS:0,MP:0,IN:0});
+  const byRoom={DR:0,PR:0,OS:0,MP:0,IN:0};
   weekDates.forEach(d=>{
     sessions.filter(s=>s.dateISO===toISO(d)).forEach(s=>{
       if(bySpec[s.specialist]){bySpec[s.specialist].min+=s.durationMin;bySpec[s.specialist][s.room]++;}
@@ -814,7 +822,7 @@ function renderStats(weekDates){
     sc.innerHTML='<span class="sc-dot" style="background:'+SPEC_COLORS[i]+'"></span>'
       +'<span class="sc-name">'+shortN(spec)+'</span>'
       +'<span class="sc-val'+(over?' sc-over':'')+'">'+hrs+'h</span>'
-      +'<span class="sc-sub">DR:'+c2.DR+' PR:'+c2.PR+' OS:'+c2.OS+'</span>'
+      +'<span class="sc-sub">DR:'+c2.DR+' PR:'+c2.PR+' OS:'+c2.OS+' MP:'+c2.MP+' IN:'+c2.IN+'</span>'
       +'<div class="limit-bar"><div class="limit-fill '+fc+'" style="width:'+pct+'%"></div></div>';
     bar.appendChild(sc);
   });
@@ -1061,7 +1069,7 @@ function buildShareText(){
     const ds=sessions.filter(s=>s.dateISO===iso).sort((a,b)=>a.startMin-b.startMin);
     if(!ds.length) continue;
     lines.push(DAYS[i]+' '+fmtD(d));
-    ds.forEach(s=>{let l='  • '+m2t(s.startMin)+'–'+m2t(s.startMin+s.durationMin)+' ('+durLbl(s.durationMin)+') — '+ROOMS[s.room].short+': '+s.specialist;if(cfg.whatsNotes&&s.note) l+=' ('+s.note+')';lines.push(l);has=true;});
+    ds.forEach(s=>{let l='  • '+m2t(s.startMin)+'–'+m2t(s.startMin+s.durationMin)+' ('+durLbl(s.durationMin)+') — '+ROOMS[s.room]?ROOMS[s.room].short+': '+s.specialist:s.room+': '+s.specialist;if(cfg.whatsNotes&&s.note) l+=' ('+s.note+')';lines.push(l);has=true;});
     lines.push('');
   }
   if(!has) lines.push('Sin sesiones asignadas esta semana.');
