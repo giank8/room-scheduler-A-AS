@@ -6,6 +6,7 @@
 <title>Room Scheduler — Kyndryl</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
 :root{--kyn-red:#EF3E23;--kyn-red2:#c8341c;--kyn-dark:#1a1a1a;--kyn-gray:#f2f2f0;--kyn-gray2:#e5e5e3;--kyn-gray3:#b0b0ac;--kyn-gray4:#6b6b68;--kyn-white:#ffffff;--kyn-border:#ddddd9;--dr-bg:#fff5f3;--dr-border:#EF3E23;--dr-text:#b02e18;--pr-bg:#f0f4ff;--pr-border:#2563eb;--pr-text:#1d4ed8;--os-bg:#f0fdf4;--os-border:#16a34a;--os-text:#15803d;--warn:#f59e0b;--danger:#dc2626;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--card-r:5px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--kyn-gray);color:var(--kyn-dark);font-family:var(--font);font-size:14px;min-height:100vh;}
@@ -62,51 +63,96 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
 .sup-card.night-card{border-left-color:var(--pr-border);}
 .sup-card .sup-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--kyn-gray4);letter-spacing:.4px;}
 .sup-card .sup-names{font-weight:600;color:var(--kyn-dark);font-size:12px;}
-/* TIMELINE */
+/* TIMELINE — 30-min slot grid */
 .schedule-wrapper{padding:16px 28px;overflow-x:auto;}
-.timeline-outer{display:flex;border:1px solid var(--kyn-border);border-radius:var(--card-r);overflow:hidden;min-width:720px;box-shadow:0 1px 6px rgba(0,0,0,.06);background:var(--kyn-border);gap:1px;}
-.time-axis{width:64px;flex-shrink:0;background:var(--kyn-gray);}
-.time-axis-header{height:40px;background:var(--kyn-dark);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;}
-.time-axis-body{position:relative;}
-.time-tick{position:absolute;right:8px;font-family:var(--mono);font-size:10px;color:var(--kyn-gray4);transform:translateY(-50%);white-space:nowrap;}
-.days-container{flex:1;display:flex;gap:1px;min-width:0;}
-.day-col{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--kyn-border);gap:1px;}
-.day-header{height:40px;background:var(--kyn-dark);color:#fff;font-family:var(--mono);font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;}
-.day-header.today{background:var(--kyn-red);}
-.day-header.weekend{background:#2a2a2a;}
-.day-header .dh-name{font-weight:600;font-size:12px;letter-spacing:.4px;}
-.day-header .dh-date{font-size:9px;opacity:.45;}
-.day-header.today .dh-date{opacity:.72;}
-.day-body{flex:1;background:var(--kyn-white);position:relative;cursor:crosshair;}
-.day-body:hover{background:#fafaf9;}
-.hour-line{position:absolute;left:0;right:0;border-top:1px solid var(--kyn-border);pointer-events:none;}
-.hour-line.half{border-top:1px dashed var(--kyn-gray2);}
-.now-line{position:absolute;left:0;right:0;border-top:2px solid var(--kyn-red);z-index:10;pointer-events:none;}
-.now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--kyn-red);}
-.add-btn-float{position:absolute;bottom:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--kyn-red);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;z-index:5;line-height:1;}
-.day-body:hover .add-btn-float{opacity:1;}
-.add-btn-float:hover{background:var(--kyn-red2);}
-.session-block{position:absolute;left:4px;right:4px;border-radius:4px;border-left:3px solid;padding:4px 6px;cursor:pointer;overflow:hidden;transition:box-shadow .12s,transform .1s;z-index:6;font-size:11px;}
-.session-block:hover{box-shadow:0 4px 14px rgba(0,0,0,.18);transform:scale(1.01);z-index:7;}
-.session-block.room-dr{background:var(--dr-bg);border-left-color:var(--dr-border);color:var(--dr-text);}
-.session-block.room-pr{background:var(--pr-bg);border-left-color:var(--pr-border);color:var(--pr-text);}
-.session-block.room-os{background:var(--os-bg);border-left-color:var(--os-border);color:var(--os-text);}
-.session-block.filtered{opacity:.18;}
-.sb-room-tag{font-size:8px;font-weight:700;letter-spacing:.5px;opacity:.65;display:block;line-height:1;}
-.sb-spec{font-weight:700;font-size:11px;display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sb-time{font-size:9px;font-family:var(--mono);opacity:.7;display:block;line-height:1;}
+.tl-table{width:100%;min-width:700px;border-collapse:collapse;border:1px solid var(--kyn-border);border-radius:var(--card-r);overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+/* Header */
+.tl-th-corner{width:58px;background:var(--kyn-dark);font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);text-align:center;vertical-align:middle;height:40px;letter-spacing:1px;border-right:1px solid rgba(255,255,255,.07);}
+.tl-th-day{background:var(--kyn-dark);color:#fff;font-family:var(--mono);font-size:11px;text-align:center;vertical-align:middle;height:40px;border-left:1px solid rgba(255,255,255,.06);min-width:80px;}
+.tl-th-day.today{background:var(--kyn-red);}
+.tl-th-day.weekend{background:#2a2a2a;}
+.tl-th-day .dh-name{display:block;font-weight:600;font-size:12px;letter-spacing:.3px;}
+.tl-th-day .dh-date{display:block;font-size:9px;opacity:.45;}
+.tl-th-day.today .dh-date{opacity:.72;}
+/* Time cells */
+.tl-td-time{
+  background:var(--kyn-gray);border-right:1px solid var(--kyn-border);
+  font-family:var(--mono);font-size:10px;color:var(--kyn-gray4);
+  text-align:right;padding:0 7px 0 4px;vertical-align:top;
+  white-space:nowrap;width:58px;user-select:none;
+}
+.tl-td-time.hour{border-top:1px solid var(--kyn-border);padding-top:3px;color:var(--kyn-dark);font-weight:500;}
+.tl-td-time.half{border-top:1px dashed var(--kyn-gray2);font-size:9px;color:var(--kyn-gray3);padding-top:2px;}
+/* Slot cells */
+.tl-slot{
+  background:var(--kyn-white);
+  border-left:1px solid var(--kyn-border);
+  border-top:1px solid var(--kyn-border);
+  height:28px;
+  position:relative;
+  cursor:pointer;
+  transition:background .1s;
+  vertical-align:top;
+}
+.tl-slot.half-hour{border-top:1px dashed var(--kyn-gray2);}
+.tl-slot:hover{background:#fff8f7;}
+.tl-slot.drag-over{background:rgba(239,62,35,.1);}
+/* Session blocks inside slots — rendered as div inside td with rowspan */
+.sess-block{
+  position:absolute;inset:1px 3px;
+  border-radius:4px;border-left:3px solid;
+  padding:3px 6px;cursor:pointer;
+  overflow:hidden;z-index:4;
+  transition:box-shadow .12s,filter .1s;
+  display:flex;flex-direction:column;justify-content:flex-start;
+}
+.sess-block:hover{box-shadow:0 3px 12px rgba(0,0,0,.18);filter:brightness(.96);}
+.sess-block.room-dr{background:var(--dr-bg);border-left-color:var(--dr-border);color:var(--dr-text);}
+.sess-block.room-pr{background:var(--pr-bg);border-left-color:var(--pr-border);color:var(--pr-text);}
+.sess-block.room-os{background:var(--os-bg);border-left-color:var(--os-border);color:var(--os-text);}
+.sess-block.filtered{opacity:.15;}
+.sb-room-tag{font-size:8px;font-weight:700;letter-spacing:.5px;opacity:.65;line-height:1;}
+.sb-spec{font-weight:700;font-size:11px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-time{font-size:9px;font-family:var(--mono);opacity:.7;line-height:1;}
 .sb-remove{position:absolute;top:3px;right:4px;background:none;border:none;color:inherit;cursor:pointer;opacity:0;font-size:12px;padding:0;transition:opacity .12s;}
-.session-block:hover .sb-remove{opacity:.6;}
+.sess-block:hover .sb-remove{opacity:.6;}
 .sb-remove:hover{opacity:1!important;}
+/* Now indicator row */
+.now-row td{border-top:2px solid var(--kyn-red)!important;}
+.now-dot{position:absolute;left:-5px;top:-5px;width:9px;height:9px;border-radius:50%;background:var(--kyn-red);z-index:10;}
 /* STATS */
-.stats-bar{padding:14px 28px;display:flex;gap:10px;flex-wrap:wrap;background:var(--kyn-white);border-top:1px solid var(--kyn-border);border-bottom:1px solid var(--kyn-border);}
-.stat-card{background:var(--kyn-gray);border:1px solid var(--kyn-border);border-radius:var(--card-r);padding:11px 14px;min-width:108px;position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kyn-red);}
-.stat-card.spec-stat::before{background:var(--spec-col);}
-.stat-card .sn{font-size:10px;font-family:var(--mono);color:var(--kyn-gray4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
-.stat-card .sv{font-size:24px;font-weight:700;color:var(--kyn-dark);line-height:1;}
-.stat-card .ss{font-size:9px;color:var(--kyn-gray4);font-family:var(--mono);margin-top:3px;line-height:1.5;}
-.limit-bar{background:var(--kyn-gray2);border-radius:20px;height:4px;margin-top:5px;overflow:hidden;}
+.stats-bar{
+  padding:8px 28px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  background:var(--kyn-white);border-bottom:1px solid var(--kyn-border);
+}
+/* Room totals — small pills */
+.stat-pill{
+  display:flex;align-items:center;gap:7px;
+  background:var(--kyn-gray);border:1px solid var(--kyn-border);
+  border-radius:20px;padding:4px 12px;
+  font-family:var(--mono);font-size:11px;color:var(--kyn-dark);
+  border-left:3px solid var(--kyn-red);
+}
+.stat-pill .sp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.stat-pill .sp-label{color:var(--kyn-gray4);font-size:10px;}
+.stat-pill .sp-val{font-weight:700;font-size:13px;color:var(--kyn-dark);}
+/* Separator */
+.stats-sep{width:1px;height:20px;background:var(--kyn-border);margin:0 2px;flex-shrink:0;}
+/* Specialist mini-cards */
+.stat-card{
+  display:flex;align-items:center;gap:8px;
+  background:var(--kyn-gray);border:1px solid var(--kyn-border);
+  border-radius:20px;padding:4px 12px;
+  font-family:var(--mono);font-size:11px;
+  border-left:3px solid var(--spec-col,var(--kyn-red));
+}
+.stat-card .sc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.stat-card .sc-name{color:var(--kyn-gray4);font-size:10px;}
+.stat-card .sc-val{font-weight:700;font-size:12px;color:var(--kyn-dark);}
+.stat-card .sc-sub{font-size:9px;color:var(--kyn-gray4);}
+.stat-card .sc-over{color:var(--danger);font-weight:700;}
+/* Limit bar — tiny, inside pill */
+.limit-bar{width:36px;background:var(--kyn-gray2);border-radius:20px;height:3px;overflow:hidden;flex-shrink:0;}
 .limit-fill{height:100%;border-radius:20px;transition:width .3s;}
 .limit-fill.ok{background:#16a34a;}.limit-fill.warn{background:var(--warn);}.limit-fill.over{background:var(--danger);}
 /* MONTH */
@@ -195,9 +241,10 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
 .footer{padding:10px 28px;display:flex;justify-content:space-between;align-items:center;background:var(--kyn-gray);border-top:1px solid var(--kyn-border);}
 .footer-left{font-size:11px;color:var(--kyn-gray4);font-family:var(--mono);}
 .footer-right{font-size:11px;color:var(--kyn-gray3);font-family:var(--mono);}
+
 </style>
 </head>
-<body>
+
 <div class="header">
   <div class="header-left">
     <div class="kyn-logo">kyndryl</div>
@@ -253,8 +300,8 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
     <button class="btn btn-outline" onclick="changeWeek(1)">Siguiente &rarr;</button>
   </div>
   <div class="support-banner" id="supportBanner"></div>
-  <div class="schedule-wrapper"><div class="timeline-outer" id="timelineOuter"></div></div>
   <div class="stats-bar" id="statsBar"></div>
+  <div class="schedule-wrapper"><div id="timelineOuter"></div></div>
 </div>
 <div id="page-monthly" class="page">
   <div class="controls">
@@ -315,11 +362,11 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
       <h3>Horario operativo</h3>
       <div class="settings-row">
         <div><div>Hora de inicio del dia</div></div>
-        <input type="number" id="settingStartHour" min="0" max="12" value="7" onchange="saveSettings()"/>
+        <input type="number" id="settingStartHour" min="0" max="23" value="0" onchange="saveSettings()"/>
       </div>
       <div class="settings-row">
         <div><div>Hora de fin del dia</div></div>
-        <input type="number" id="settingEndHour" min="12" max="24" value="23" onchange="saveSettings()"/>
+        <input type="number" id="settingEndHour" min="1" max="24" value="24" onchange="saveSettings()"/>
       </div>
       <div class="settings-row">
         <div><div>Advertencia si esta en guardia nocturna</div></div>
@@ -407,7 +454,9 @@ input[type=date]:focus,select.ctrl-select:focus{border-color:var(--kyn-red);}
   </div>
 </div>
 <div class="tooltip" id="tooltip"></div>
+
 <script>
+
 const SPECIALISTS=['Diego Postigo','Fredy Mejia','Saori Kobayashi','Miguel Montanez','Kevin Pillaca','Bryan Arnao Farfan','Jesus Salazar Paz'];
 const SPEC_COLORS=['#EF3E23','#0062FF','#8a3ffc','#007d79','#f1620a','#198038','#a2191f'];
 const ROOMS={DR:{label:'Diagnostic Room',short:'DR',cls:'room-dr'},PR:{label:'Problem Room',short:'PR',cls:'room-pr'},OS:{label:'One Shot',short:'OS',cls:'room-os'}};
@@ -437,7 +486,7 @@ const DAYS=['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
 const PX=1.6;
 let sessions=JSON.parse(localStorage.getItem('kyn_v3')||'[]');
 let historyLog=JSON.parse(localStorage.getItem('kyn_hist')||'[]');
-let cfg=JSON.parse(localStorage.getItem('kyn_cfg')||'{"maxHours":10,"alerts":true,"nightBlock":false,"startHour":7,"endHour":23,"whatsNotes":true,"whatsSupport":true}');
+let cfg=JSON.parse(localStorage.getItem('kyn_cfg')||'{"maxHours":10,"alerts":true,"nightBlock":false,"startHour":0,"endHour":24,"whatsNotes":true,"whatsSupport":true}');
 let currentMonday=getMonday(new Date());
 let activeSpecFilter='';
 let activeRoomFilter='';
@@ -510,84 +559,132 @@ function switchTab(name,el){
 function renderWeekly(){
   const outer=document.getElementById('timelineOuter');outer.innerHTML='';
   const filterSpec=document.getElementById('specFilter').value;
-  const startH=cfg.startHour,endH=cfg.endHour;
-  const totalMin=(endH-startH)*60;
-  const totalPx=totalMin*PX;
+  const startH=cfg.startHour, endH=cfg.endHour;
+  const SLOT=30; // minutes per row
+  const ROW_H=28; // px per slot row
   const weekDates=[];
   for(let i=0;i<7;i++) weekDates.push(addDays(currentMonday,i));
   document.getElementById('weekLabel').innerHTML='<em>'+fmtD(currentMonday)+'</em> &mdash; <em>'+fmtD(addDays(currentMonday,6))+'</em>';
   document.getElementById('weekPicker').value=toISO(currentMonday);
   const overloaded=checkOverloads(weekDates);
   renderAlertBanner(overloaded);
-  // Time axis
-  const axis=document.createElement('div');axis.className='time-axis';
-  const axH=document.createElement('div');axH.className='time-axis-header';axH.textContent='HR';axis.appendChild(axH);
-  const axB=document.createElement('div');axB.className='time-axis-body';axB.style.height=totalPx+'px';
-  for(let h=startH;h<=endH;h++){
-    const tick=document.createElement('div');tick.className='time-tick';
-    tick.style.top=((h-startH)*60*PX)+'px';
-    tick.textContent=String(h).padStart(2,'0')+':00';
-    axB.appendChild(tick);
-  }
-  axis.appendChild(axB);outer.appendChild(axis);
-  const dc=document.createElement('div');dc.className='days-container';
+
+  // Build slots array: each slot = startMin
+  const slots=[];
+  for(let m=startH*60;m<endH*60;m+=SLOT) slots.push(m);
+
+  // Build table
+  const tbl=document.createElement('table');tbl.className='tl-table';
+
+  // THEAD
+  const thead=document.createElement('thead');
+  const hrow=document.createElement('tr');
+  const thC=document.createElement('th');thC.className='tl-th-corner';thC.textContent='HR';hrow.appendChild(thC);
+  weekDates.forEach((date,di)=>{
+    const th=document.createElement('th');
+    th.className='tl-th-day'+(isToday(date)?' today':'')+(di>=5?' weekend':'');
+    th.innerHTML='<span class="dh-name">'+DAYS[di]+'</span><span class="dh-date">'+fmtD(date)+'</span>';
+    hrow.appendChild(th);
+  });
+  thead.appendChild(hrow);tbl.appendChild(thead);
+
+  // TBODY
+  const tbody=document.createElement('tbody');
+
+  // For each day, precompute which slots are occupied by which session
+  // occupied[di][slotMin] = {sess, isFirst, rowspan}
+  const occupied=weekDates.map(()=>({}));
   weekDates.forEach((date,di)=>{
     const dateISO=toISO(date);
-    const col=document.createElement('div');col.className='day-col';
-    const hdr=document.createElement('div');
-    hdr.className='day-header'+(isToday(date)?' today':'')+(di>=5?' weekend':'');
-    hdr.innerHTML='<span class="dh-name">'+DAYS[di]+'</span><span class="dh-date">'+fmtD(date)+'</span>';
-    col.appendChild(hdr);
-    const body=document.createElement('div');body.className='day-body';body.style.height=totalPx+'px';
-    for(let h=startH;h<=endH;h++){
-      const top=((h-startH)*60*PX);
-      const line=document.createElement('div');line.className='hour-line';line.style.top=top+'px';body.appendChild(line);
-      if(h<endH){const half=document.createElement('div');half.className='hour-line half';half.style.top=(top+30*PX)+'px';body.appendChild(half);}
-    }
-    if(isToday(date)){
-      const now=new Date();const nowMin=now.getHours()*60+now.getMinutes();
-      if(nowMin>=startH*60&&nowMin<=endH*60){
-        const nl=document.createElement('div');nl.className='now-line';nl.style.top=((nowMin-startH*60)*PX)+'px';nl.id='nowLine';body.appendChild(nl);
-      }
-    }
-    const addBtn=document.createElement('button');addBtn.className='add-btn-float';addBtn.textContent='+';
-    addBtn.onclick=(e)=>{e.stopPropagation();openAddModal(date);};
-    body.appendChild(addBtn);
-    body.addEventListener('click',e=>{
-      if(e.target===body||e.target.classList.contains('hour-line')){
-        const rect=body.getBoundingClientRect();
-        const clickMin=Math.round(((e.clientY-rect.top)/PX)/15)*15+startH*60;
-        openAddModal(date,Math.max(startH*60,Math.min(endH*60-30,clickMin)));
-      }
-    });
-    const daySess=sessions.filter(s=>s.dateISO===dateISO).sort((a,b)=>a.startMin-b.startMin);
-    const placed=[];
-    daySess.forEach(sess=>{
+    sessions.filter(s=>s.dateISO===dateISO).sort((a,b)=>a.startMin-b.startMin).forEach(sess=>{
       if(activeRoomFilter&&activeRoomFilter!==sess.room) return;
-      const isFiltered=filterSpec&&filterSpec!==sess.specialist;
-      const top=Math.max(0,(sess.startMin-startH*60)*PX);
-      const height=Math.max(22,sess.durationMin*PX);
-      let slot=0;
       const endMin=sess.startMin+sess.durationMin;
-      for(const p of placed){if(p.endMin>sess.startMin&&p.startMin<endMin&&p.slot===slot) slot++;}
-      placed.push({startMin:sess.startMin,endMin,slot});
-      const block=document.createElement('div');
-      block.className='session-block '+ROOMS[sess.room].cls+(isFiltered?' filtered':'');
-      block.style.cssText='top:'+top+'px;height:'+height+'px;left:'+(slot>0?'calc(50% + 1px)':'4px')+';width:'+(slot>0?'calc(50% - 5px)':'calc(100% - 8px)')+';';
-      block.dataset.id=sess.id;
-      block.innerHTML='<span class="sb-room-tag">'+ROOMS[sess.room].short+'</span><span class="sb-spec">'+shortN(sess.specialist)+'</span><span class="sb-time">'+m2t(sess.startMin)+' &middot; '+durLbl(sess.durationMin)+'</span><button class="sb-remove" onclick="removeSession(event,\''+sess.id+'\')">&#x2715;</button>';
-      block.addEventListener('click',e=>{if(!e.target.classList.contains('sb-remove')) openEditModal(sess.id);});
-      block.addEventListener('mouseenter',ev=>showTooltip(ev,sess));
-      block.addEventListener('mouseleave',hideTooltip);
-      body.appendChild(block);
+      const rowspan=Math.ceil(sess.durationMin/SLOT);
+      for(let m=sess.startMin;m<endMin;m+=SLOT){
+        if(m>=startH*60&&m<endH*60){
+          occupied[di][m]={sess,isFirst:m===sess.startMin,rowspan,filterSpec};
+        }
+      }
     });
-    col.appendChild(body);dc.appendChild(col);
   });
-  outer.appendChild(dc);
+
+  // Now line: current minute snapped to nearest slot
+  const nowDate=new Date();
+  const nowMin=nowDate.getHours()*60+nowDate.getMinutes();
+  const nowSlot=Math.floor(nowMin/SLOT)*SLOT;
+  const todayISO=toISO(nowDate);
+
+  slots.forEach((slotMin,si)=>{
+    const tr=document.createElement('tr');
+    const isHour=slotMin%60===0;
+    const isHalf=slotMin%60===30;
+
+    // Check if this is the now row (today)
+    const isNowRow=weekDates.some(d=>toISO(d)===todayISO)&&slotMin===nowSlot;
+    if(isNowRow) tr.className='now-row';
+
+    // Time label cell
+    const tdTime=document.createElement('td');
+    tdTime.className='tl-td-time '+(isHour?'hour':'half');
+    if(isHour) tdTime.textContent=String(Math.floor(slotMin/60)).padStart(2,'0')+':00';
+    else tdTime.textContent=':30';
+    tr.appendChild(tdTime);
+
+    // Day cells
+    weekDates.forEach((date,di)=>{
+      const dateISO=toISO(date);
+      const occ=occupied[di][slotMin];
+
+      if(occ&&!occ.isFirst){
+        // Skip — already covered by rowspan of first slot
+        return;
+      }
+
+      const td=document.createElement('td');
+      td.className='tl-slot'+(isHalf?' half-hour':'');
+      if(isNowRow&&toISO(date)===todayISO){
+        const dot=document.createElement('div');dot.className='now-dot';td.appendChild(dot);
+      }
+
+      if(occ&&occ.isFirst){
+        // Render session block
+        const sess=occ.sess;
+        const rowspan=Math.max(1,Math.min(occ.rowspan, slots.length-si));
+        td.rowSpan=rowspan;
+        td.style.verticalAlign='top';
+        td.style.padding='0';
+        td.style.position='relative';
+        const isFiltered=filterSpec&&filterSpec!==sess.specialist;
+        const block=document.createElement('div');
+        block.className='sess-block '+ROOMS[sess.room].cls+(isFiltered?' filtered':'');
+        block.style.height='100%';
+        block.dataset.id=sess.id;
+        block.innerHTML='<span class="sb-room-tag">'+ROOMS[sess.room].short+'</span>'
+          +'<span class="sb-spec">'+shortN(sess.specialist)+'</span>'
+          +'<span class="sb-time">'+m2t(sess.startMin)+'&ndash;'+m2t(sess.startMin+sess.durationMin)+'</span>'
+          +'<button class="sb-remove" onclick="removeSession(event,\''+sess.id+'\')">&#x2715;</button>';
+        block.addEventListener('click',e=>{if(!e.target.classList.contains('sb-remove')) openEditModal(sess.id);});
+        block.addEventListener('mouseenter',ev=>showTooltip(ev,sess));
+        block.addEventListener('mouseleave',hideTooltip);
+        td.appendChild(block);
+      } else {
+        // Empty slot — click to add
+        if(!filterSpec){
+          td.addEventListener('click',()=>openAddModal(date,slotMin));
+          td.title=m2t(slotMin)+' — '+fmtD(date);
+        }
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  tbl.appendChild(tbody);
+  outer.appendChild(tbl);
   renderSupportBanner(weekDates[0]);
   renderStats(weekDates);
 }
-function updateNowLine(){const nl=document.getElementById('nowLine');if(!nl) return;const now=new Date();const nowMin=now.getHours()*60+now.getMinutes();nl.style.top=((nowMin-cfg.startHour*60)*PX)+'px';}
+function updateNowLine(){renderWeekly();}
 function checkOverloads(weekDates){
   const hours={};SPECIALISTS.forEach(s=>hours[s]=0);
   weekDates.forEach(d=>{sessions.filter(s=>s.dateISO===toISO(d)).forEach(s=>{if(hours[s.specialist]!==undefined) hours[s.specialist]+=s.durationMin/60;});});
@@ -610,24 +707,49 @@ function renderStats(weekDates){
   const bar=document.getElementById('statsBar');bar.innerHTML='';
   const bySpec={};SPECIALISTS.forEach(s=>bySpec[s]={min:0,DR:0,PR:0,OS:0});
   const byRoom={DR:0,PR:0,OS:0};
-  weekDates.forEach(d=>{sessions.filter(s=>s.dateISO===toISO(d)).forEach(s=>{if(bySpec[s.specialist]){bySpec[s.specialist].min+=s.durationMin;bySpec[s.specialist][s.room]++;}byRoom[s.room]++;});});
-  const total=Object.values(byRoom).reduce((a,b)=>a+b,0);
-  const tc=document.createElement('div');tc.className='stat-card';
-  tc.innerHTML='<div class="sn">Esta semana</div><div class="sv">'+total+'</div><div class="ss">DR:'+byRoom.DR+' &middot; PR:'+byRoom.PR+' &middot; OS:'+byRoom.OS+'</div>';
-  bar.appendChild(tc);
-  [{room:'DR',col:'var(--dr-border)'},{room:'PR',col:'var(--pr-border)'},{room:'OS',col:'var(--os-border)'}].forEach(function(o){
-    const sc=document.createElement('div');sc.className='stat-card spec-stat';sc.style.setProperty('--spec-col',o.col);
-    sc.innerHTML='<div class="sn">'+ROOMS[o.room].label+'</div><div class="sv">'+byRoom[o.room]+'</div><div class="ss">sesiones</div>';
-    bar.appendChild(sc);
+  weekDates.forEach(d=>{
+    sessions.filter(s=>s.dateISO===toISO(d)).forEach(s=>{
+      if(bySpec[s.specialist]){bySpec[s.specialist].min+=s.durationMin;bySpec[s.specialist][s.room]++;}
+      byRoom[s.room]++;
+    });
   });
-  const sep=document.createElement('div');sep.style.cssText='width:1px;background:var(--kyn-border);margin:0 4px;align-self:stretch';bar.appendChild(sep);
+  const total=Object.values(byRoom).reduce((a,b)=>a+b,0);
+
+  // Total pill
+  const tp=document.createElement('div');tp.className='stat-pill';
+  tp.innerHTML='<span class="sp-label">Semana</span><span class="sp-val">'+total+'</span>';
+  bar.appendChild(tp);
+
+  // Room pills
+  [{room:'DR',col:'var(--dr-border)',dot:'#EF3E23'},{room:'PR',col:'var(--pr-border)',dot:'#2563eb'},{room:'OS',col:'var(--os-border)',dot:'#16a34a'}].forEach(function(o){
+    const p=document.createElement('div');p.className='stat-pill';
+    p.style.borderLeftColor=o.col;
+    p.innerHTML='<span class="sp-dot" style="background:'+o.dot+'"></span>'
+      +'<span class="sp-label">'+ROOMS[o.room].short+'</span>'
+      +'<span class="sp-val">'+byRoom[o.room]+'</span>';
+    bar.appendChild(p);
+  });
+
+  // Separator
+  const hasSpec=SPECIALISTS.some(s=>bySpec[s]&&bySpec[s].min>0);
+  if(hasSpec){
+    const sep=document.createElement('div');sep.className='stats-sep';bar.appendChild(sep);
+  }
+
+  // Specialist pills
   SPECIALISTS.forEach((spec,i)=>{
-    const c=bySpec[spec];if(!c||c.min===0) return;
-    const hrs=(c.min/60).toFixed(1);const over=parseFloat(hrs)>cfg.maxHours;
+    const c2=bySpec[spec];if(!c2||c2.min===0) return;
+    const hrs=(c2.min/60).toFixed(1);
+    const over=parseFloat(hrs)>cfg.maxHours;
     const pct=Math.min(100,Math.round(parseFloat(hrs)/cfg.maxHours*100));
     const fc=pct>=100?'over':pct>=75?'warn':'ok';
-    const sc=document.createElement('div');sc.className='stat-card spec-stat';sc.style.setProperty('--spec-col',SPEC_COLORS[i]);
-    sc.innerHTML='<div class="sn">'+shortN(spec)+'</div><div class="sv'+(over?' overload-flag':'')+'">'+hrs+'h'+(over?'&#9888;&#65039;':'')+'</div><div class="ss">DR:'+c.DR+' &middot; PR:'+c.PR+' &middot; OS:'+c.OS+'</div><div class="limit-bar"><div class="limit-fill '+fc+'" style="width:'+pct+'%"></div></div>';
+    const sc=document.createElement('div');sc.className='stat-card';
+    sc.style.setProperty('--spec-col',SPEC_COLORS[i]);
+    sc.innerHTML='<span class="sc-dot" style="background:'+SPEC_COLORS[i]+'"></span>'
+      +'<span class="sc-name">'+shortN(spec)+'</span>'
+      +'<span class="sc-val'+(over?' sc-over':'')+'">'+hrs+'h</span>'
+      +'<span class="sc-sub">DR:'+c2.DR+' PR:'+c2.PR+' OS:'+c2.OS+'</span>'
+      +'<div class="limit-bar"><div class="limit-fill '+fc+'" style="width:'+pct+'%"></div></div>';
     bar.appendChild(sc);
   });
 }
@@ -639,7 +761,7 @@ function openAddModal(date,sugMin){
   document.getElementById('modalRoom').value=activeRoomFilter||'DR';
   updateModalRoomTag();
   populateModalSpec(null,date);
-  document.getElementById('modalStart').value=m2t(sugMin||cfg.startHour*60+60);
+  document.getElementById('modalStart').value=m2t(sugMin!==undefined?sugMin:cfg.startHour*60+60);
   document.getElementById('modalDur').value='120';
   document.getElementById('customDurRow').style.display='none';
   document.getElementById('modalNote').value='';
@@ -916,6 +1038,7 @@ function toggleRoomFilter(room,pill){
   renderWeekly();
 }
 init();
+
 </script>
 </body>
 </html>
