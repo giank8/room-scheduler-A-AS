@@ -1,0 +1,176 @@
+{
+  "sessions": [
+    {
+      "id": "mpx6xmmso25c",
+      "dateISO": "2026-06-02",
+      "room": "PR",
+      "specialist": "Kevin Pillaca",
+      "startMin": 960,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mpx6xv2clp32",
+      "dateISO": "2026-06-02",
+      "room": "DR",
+      "specialist": "Diego Postigo",
+      "startMin": 660,
+      "durationMin": 120,
+      "note": "",
+      "shift": "day"
+    },
+    {
+      "id": "mpx6xzx1of0l",
+      "dateISO": "2026-06-03",
+      "room": "DR",
+      "specialist": "Jesus Salazar Paz",
+      "startMin": 840,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mpyzmx4urd99",
+      "dateISO": "2026-06-04",
+      "room": "DR",
+      "specialist": "Kevin Pillaca",
+      "startMin": 960,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mq75umu1qh9y",
+      "dateISO": "2026-06-10",
+      "room": "DR",
+      "specialist": "Jesus Salazar Paz",
+      "startMin": 660,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mqfplolra215",
+      "dateISO": "2026-06-16",
+      "room": "DR",
+      "specialist": "Kevin Pillaca",
+      "startMin": 840,
+      "durationMin": 120,
+      "note": "",
+      "shift": "day"
+    },
+    {
+      "id": "mqigvwnsvgr6",
+      "dateISO": "2026-06-18",
+      "room": "DR",
+      "specialist": "Jesus Salazar Paz",
+      "startMin": 540,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mr1138uxy77f",
+      "dateISO": "2026-07-02",
+      "room": "DR",
+      "specialist": "Miguel Montanez",
+      "startMin": 540,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mr2lam48vlxy",
+      "dateISO": "2026-07-02",
+      "room": "DR",
+      "specialist": "Diego Postigo",
+      "startMin": 840,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    },
+    {
+      "id": "mr42biqv8vel",
+      "dateISO": "2026-07-07",
+      "room": "DR",
+      "specialist": "Diego Postigo",
+      "startMin": 840,
+      "durationMin": 120,
+      "note": "",
+      "shift": "dr"
+    }
+  ],
+  "historyLog": [
+    {
+      "action": "add",
+      "text": "Diego Postigo > Diagnostic Room | 2026-07-07 14:00 2h",
+      "time": "2026-07-02T22:14:54.631Z"
+    },
+    {
+      "action": "remove",
+      "text": "Diego Postigo < Diagnostic Room | 2026-07-07 09:00",
+      "time": "2026-07-02T22:14:32.377Z"
+    },
+    {
+      "action": "add",
+      "text": "Diego Postigo > Diagnostic Room | 2026-07-07 09:00 2h",
+      "time": "2026-07-02T22:14:17.592Z"
+    },
+    {
+      "action": "add",
+      "text": "Diego Postigo > Diagnostic Room | 2026-07-02 14:00 2h",
+      "time": "2026-07-01T21:30:32.696Z"
+    },
+    {
+      "action": "add",
+      "text": "Miguel Montanez > Diagnostic Room | 2026-07-02 09:00 2h",
+      "time": "2026-06-30T19:17:10.425Z"
+    },
+    {
+      "action": "add",
+      "text": "Jesus Salazar Paz > Diagnostic Room | 2026-06-18 09:00 2h",
+      "time": "2026-06-17T19:31:44.536Z"
+    },
+    {
+      "action": "add",
+      "text": "Kevin Pillaca > Diagnostic Room | 2026-06-16 14:00 2h",
+      "time": "2026-06-15T21:12:25.551Z"
+    },
+    {
+      "action": "add",
+      "text": "Jesus Salazar Paz > Diagnostic Room | 2026-06-10 11:00 2h",
+      "time": "2026-06-09T21:37:21.433Z"
+    },
+    {
+      "action": "add",
+      "text": "Kevin Pillaca > Diagnostic Room | 2026-06-04 16:00 2h",
+      "time": "2026-06-04T04:21:14.430Z"
+    },
+    {
+      "action": "add",
+      "text": "Jesus Salazar Paz > Diagnostic Room | 2026-06-03 14:00 2h",
+      "time": "2026-06-02T22:10:16.213Z"
+    },
+    {
+      "action": "add",
+      "text": "Diego Postigo > Diagnostic Room | 2026-06-02 11:00 2h",
+      "time": "2026-06-02T22:10:09.924Z"
+    },
+    {
+      "action": "add",
+      "text": "Kevin Pillaca > Problem Room | 2026-06-02 16:00 2h",
+      "time": "2026-06-02T22:09:58.996Z"
+    }
+  ],
+  "cfg": {
+    "maxHours": 10,
+    "alerts": true,
+    "nightBlock": false,
+    "startHour": 0,
+    "endHour": 24,
+    "whatsNotes": true,
+    "whatsSupport": true
+  },
+  "savedAt": "2026-07-03T22:39:11.649Z"
+}
